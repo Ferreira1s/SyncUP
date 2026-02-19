@@ -51,6 +51,16 @@ export async function addParticipant(eventId, name, availability) {
     return newParticipantRef.key
 }
 
+// Update an existing participant's availability
+export async function updateParticipant(eventId, participantKey, name, availability) {
+    const participantRef = ref(db, `events/${eventId}/participants/${participantKey}`)
+    await set(participantRef, {
+        name,
+        availability,
+        addedAt: Date.now()
+    })
+}
+
 // Subscribe to real-time updates for an event
 export function subscribeToEvent(eventId, callback) {
     const eventRef = ref(db, `events/${eventId}`)

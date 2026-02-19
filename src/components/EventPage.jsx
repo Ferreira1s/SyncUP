@@ -1,15 +1,29 @@
 import { useState, useEffect } from 'react'
-import { subscribeToEvent, addParticipant } from '../firebase'
+import { subscribeToEvent, addParticipant, updateParticipant } from '../firebase'
 import NamePrompt from './NamePrompt'
 import AvailabilityGrid from './AvailabilityGrid'
 import ResultsView from './ResultsView'
 
 function EventPage({ eventId, onNotify }) {
+    const storageKey = `syncup_event_${eventId}`
+
+    const getSaved = () => {
+        try {
+            return JSON.parse(localStorage.getItem(storageKey)) || {}
+        } catch { return {} }
+    }
+
     const [event, setEvent] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [step, setStep] = useState('name') // 'name' | 'grid' | 'results'
-    const [participantName, setParticipantName] = useState(null)
+    const [step, setStep] = useState(() => getSaved().step || 'name')
+    const [participantName, setParticipantName] = useState(() => getSaved().name || null)
+    const [participantKey, setParticipantKey] = useState(() => getSaved().key || null)
     const [linkCopied, setLinkCopied] = useState(false)
+
+    // Helper to persist session
+    const saveSession = (name, currentStep, key) => {
+        localStorage.setItem(storageKey, JSON.stringify({ name, step: currentStep, key: key || participantKey }))
+    }
 
     // Subscribe to real-time updates
     useEffect(() => {
@@ -21,6 +35,15 @@ function EventPage({ eventId, onNotify }) {
             }
             setLoading(false)
         })
+
+        // Force sync with localStorage on mount (fixing potential race/init issues)
+        const saved = getSaved()
+        if (saved && saved.name) {
+            setParticipantName(saved.name)
+            if (saved.key) setParticipantKey(saved.key)
+            if (saved.step && saved.step !== 'name') setStep(saved.step)
+        }
+
         return () => unsubscribe()
     }, [eventId])
 
@@ -39,11 +62,21 @@ function EventPage({ eventId, onNotify }) {
     const handleNameSubmit = (name) => {
         setParticipantName(name)
         setStep('grid')
+        saveSession(name, 'grid', participantKey)
     }
 
     const handleAvailabilityDone = async (availability) => {
         try {
-            await addParticipant(eventId, participantName, availability)
+            let key = participantKey
+            if (key) {
+                // Update existing entry instead of creating a duplicate
+                await updateParticipant(eventId, key, participantName, availability)
+            } else {
+                // First time — create new entry
+                key = await addParticipant(eventId, participantName, availability)
+                setParticipantKey(key)
+            }
+            saveSession(participantName, 'results', key)
             setStep('results')
             onNotify(`${participantName} adicionado com sucesso!`, 'success')
         } catch (err) {
@@ -53,7 +86,9 @@ function EventPage({ eventId, onNotify }) {
 
     const handleAddAnother = () => {
         setParticipantName(null)
+        setParticipantKey(null)
         setStep('name')
+        localStorage.removeItem(storageKey)
     }
 
     if (loading) {
