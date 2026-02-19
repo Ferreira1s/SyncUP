@@ -1,43 +1,51 @@
 # SyncUp 📅
-<<<<<<< HEAD
 
 Uma Web App colaborativa para combinar saídas e hangouts com amigos, sem a confusão dos grupos de chat.
 
-=======
-Uma Web App colaborativa para combinar saídas e hangouts com amigos, sem a confusão dos grupos de chat.
->>>>>>> f49bdc075f57455e871603f12299f5ae56eb940d
-## 🚀 Como funciona
-1.  **Crias um Evento** e recebes um link único.
-2.  **Partilhas** o link com o teu grupo.
-3.  Cada amigo seleciona a sua **disponibilidade**.
-4.  A app mostra logo o **melhor dia** para todos se encontrarem!
-<<<<<<< HEAD
+## 🚀 Demo ao Vivo
+[https://gravitic-star.vercel.app](https://gravitic-star.vercel.app)
 
-=======
->>>>>>> f49bdc075f57455e871603f12299f5ae56eb940d
+## ✨ Funcionalidades
+*   **Criação de Eventos**: Dá um nome ao teu plano e recebe um link único.
+*   **Colaborativo**: Partilha o link e vê os teus amigos a entrarem em tempo real.
+*   **Melhores Dias**: A app destaca automaticamente os dias em que todos podem.
+*   **Mapa de Calor**: Visualiza rapidamente a disponibilidade do grupo.
+*   **100% em Português**: Interface pensada para utilizadores PT.
+
 ## 🛠️ Tecnologias Usadas
-*   **React** (Vite)
-*   **Firebase** (Base de dados em tempo real)
-*   **Vercel** (Alojamento)
-<<<<<<< HEAD
+*   **Frontend**: React (Vite)
+*   **Backend / DB**: Firebase Realtime Database
+*   **Deploy**: Vercel
 
 ## 💻 Como correr no teu PC
 
-=======
-## 💻 Como correr no teu PC
->>>>>>> f49bdc075f57455e871603f12299f5ae56eb940d
-1.  Instalar dependências:
+1.  **Clonar o repositório**
+    ```bash
+    git clone https://github.com/Ferreira1s/SyncUP.git
+    cd SyncUP
+    ```
+
+2.  **Instalar dependências**
     ```bash
     npm install
     ```
-<<<<<<< HEAD
 
-2.  Configurar o ficheiro `.env` com as chaves do Firebase.
+3.  **Configurar Variáveis de Ambiente**
+    Cria um ficheiro `.env` na raiz do projeto com as tuas chaves do Firebase:
+    ```env
+    VITE_FIREBASE_API_KEY=...
+    VITE_FIREBASE_AUTH_DOMAIN=...
+    VITE_FIREBASE_DATABASE_URL=...
+    VITE_FIREBASE_PROJECT_ID=...
+    VITE_FIREBASE_STORAGE_BUCKET=...
+    VITE_FIREBASE_MESSAGING_SENDER_ID=...
+    VITE_FIREBASE_APP_ID=...
+    ```
 
-=======
-2.  Configurar o ficheiro `.env` com as chaves do Firebase.
->>>>>>> f49bdc075f57455e871603f12299f5ae56eb940d
-3.  Correr o projeto:
+4.  **Correr o projeto**
     ```bash
     npm run dev
     ```
+
+## 📄 Licença
+MIT
