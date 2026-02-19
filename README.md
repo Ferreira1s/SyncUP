@@ -47,5 +47,3 @@ Uma Web App colaborativa para combinar saídas e hangouts com amigos, sem a conf
     npm run dev
     ```
 
-## 📄 Licença
-MIT
